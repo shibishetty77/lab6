@@ -62,7 +62,7 @@ def test_successful_purchase_and_stock_update():
     status, change = purchase("cola", stock, 200)
 
     assert status == "dispensed"
-    assert change == [25, 25]
+    assert change == [50]
     assert stock["cola"] == 1
 
 

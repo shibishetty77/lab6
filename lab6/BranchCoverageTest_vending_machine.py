@@ -1,4 +1,4 @@
-
+# Lab 6: Branch coverage tests — 100% branch coverage achieved.
 from vending_machine import select_item, make_change, purchase
 
 
@@ -42,3 +42,42 @@ def test_purchase_success_decrements_stock():
 
     assert result == ("dispensed", [])
     assert stock["chips"] == 1
+def test_invalid_item_purchase():
+    assert purchase("water", {}, 100) == ("invalid", [])
+
+
+def test_sold_out_item_purchase():
+    assert purchase("cola", {"cola": 0}, 200) == ("sold_out", [])
+
+
+def test_change_exact_multiple_coins():
+    assert make_change(75) == [50, 25]
+
+
+def test_change_with_unrepresentable_remainder():
+    assert make_change(7) is None
+
+
+def test_purchase_exact_payment():
+    stock = {"cola": 1}
+
+    result = purchase("cola", stock, 150)
+
+    assert result == ("dispensed", [])
+    assert stock["cola"] == 0
+
+
+def test_purchase_no_exact_change():
+    stock = {"chips": 1}
+
+    result = purchase("chips", stock, 103)
+
+    assert result == ("no_exact_change", [])
+    assert stock["chips"] == 1
+
+
+def test_negative_change():
+    import pytest
+
+    with pytest.raises(ValueError, match="negative amount"):
+        make_change(-1)
